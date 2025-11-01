@@ -1,17 +1,3 @@
-// script.js - Updated for PranBondhu index.html
-// Features:
-// - Fetch products (FakeStore API) with fallback
-// - Render products, search, sort, clear
-// - Cart (add/remove/change qty), totals, coupon SMART10
-// - Balance system (localStorage), Add Money +1000
-// - Cart persistence in localStorage
-// - Banner slider + controls
-// - Reviews carousel
-// - Contact form validation + success message
-// - Newsletter subscription (stores emails in localStorage)
-// - Mobile menu toggle, nav highlight, back-to-top
-// - Defensive checks for missing DOM nodes
-
 /* =========================
    Configuration & State
    ========================= */
@@ -600,3 +586,4 @@ function highlightOnScroll() {
   window.addEventListener('scroll', handler);
   handler();
 }
+

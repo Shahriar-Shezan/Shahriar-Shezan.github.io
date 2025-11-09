@@ -1,38 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PranBondhu - SmartShop</title>
+<html lang="en" data-theme="light">
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartShop</title>
+  <link rel="shortcut icon" href="https://i.ibb.co/WNV95NN3/store.png  " type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com  "></script>
+  <script src="https://kit.fontawesome.com/e21f3df6f5.js  " crossorigin="anonymous"></script>
 
   <style>
-    html { scroll-behavior: smooth; }
+    .nav-link {
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background-color: #f97316;
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .active {
+      color: #f97316;
+    }
+
+    .active::after {
+      width: 100%;
+    }
+
+    #cart-overlay {
+      z-index: 40;
+    }
+
+    #cart-sidebar {
+      z-index: 50;
+    }
+
+    #notification {
+      z-index: 50;
+    }
+
     .card-hover { transition: transform .18s ease, box-shadow .18s ease; }
     .card-hover:hover { transform: translateY(-6px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
   </style>
-
-  <script src="script.js" defer></script>
 </head>
 
-<body class="bg-green-50 min-h-screen text-slate-800">
+<body class="font-sans text-primary bg-gray-50">
 
-  <!-- NAVBAR -->
-  <nav id="navbar" class="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#home" class="flex items-center gap-3">
-        <img src="https://i.ibb.co/WNV95NN3/store.png" alt="PranBondhu" class="w-10 h-10 object-contain">
-        <span class="font-bold text-lg">PranBondhu Shop</span>
+  <!-- Navbar -->
+  <header id="navbar"
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md shadow-sm">
+    <div class="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
+
+      <!-- Logo + Name -->
+      <a href="#home" class="flex items-center space-x-2 text-2xl font-semibold">
+        <img src="https://i.ibb.co/WNV95NN3/store.png  " alt="SmartShop Logo" class="w-8 h-8">
+        <span class="text-black hover:text-orange-500">SmartShop</span>
       </a>
 
-      <div class="hidden md:flex items-center gap-4" id="nav-links">
-        <a href="#home" class="nav-link px-3 py-2 rounded">Home</a>
-        <a href="#products" class="nav-link px-3 py-2 rounded">Products</a>
-        <a href="#reviews" class="nav-link px-3 py-2 rounded">Reviews</a>
-        <a href="#contact" class="nav-link px-3 py-2 rounded">Contact</a>
-      </div>
+      <!-- Menu -->
+      <nav class="hidden md:flex space-x-6 font-medium text-black" id="nav-links">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#products" class="nav-link">Products</a>
+        <a href="#reviews" class="nav-link">Reviews</a>
+        <a href="#about" class="nav-link">About Us</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
 
       <div class="flex items-center gap-3">
         <div class="hidden sm:flex items-center gap-2 bg-rose-600/10 px-3 py-1 rounded text-sm">
@@ -40,15 +83,15 @@
           <span id="balance-display" class="font-semibold">1000 BDT</span>
         </div>
 
-        <!-- refined cart button -->
-        <button id="cart-button" aria-label="Open cart" class="relative bg-rose-600 hover:bg-rose-700 p-2 rounded-full shadow text-white">
-          <image src="https://i.ibb.co.com/whNMFnxQ/shopping-cart.png" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="white">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1 4h10l-1-4M7 13h10" />
-          </svg>
-          <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
-        </button>
+        <!-- Cart Icon -->
+        <div class="flex items-center space-x-3">
+          <button id="cartBtn" class="hover:scale-110 transition relative">
+            <img src="https://i.ibb.co.com/whNMFnxQ/shopping-cart.png  " alt="Cart" class="w-6 h-6">
+            <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+          </button>
+        </div>
 
+        <!-- Mobile Menu Button -->
         <button id="mobile-menu-button" class="md:hidden p-2">
           <svg class="w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" fill="none">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -57,162 +100,207 @@
       </div>
     </div>
 
-    <!-- mobile menu -->
-    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2">
-      <a href="#home" class="block px-3 py-2 rounded hover:bg-rose-600">Home</a>
-      <a href="#products" class="block px-3 py-2 rounded hover:bg-rose-600">Products</a>
-      <a href="#reviews" class="block px-3 py-2 rounded hover:bg-rose-600">Reviews</a>
-      <a href="#contact" class="block px-3 py-2 rounded hover:bg-rose-600">Contact</a>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 bg-white shadow-lg">
+      <a href="#home" class="block px-3 py-2 text-black">Home</a>
+      <a href="#products" class="block px-3 py-2 text-black">Products</a>
+      <a href="#reviews" class="block px-3 py-2 text-black">Reviews</a>
+      <a href="#about" class="block px-3 py-2 text-black">About Us</a>
+      <a href="#contact" class="block px-3 py-2 text-black">Contact</a>
     </div>
-  </nav>
+  </header>
 
-  <main class="pt-20">
+  <!-- HERO / BANNER SECTION -->
+  <section id="home" class="max-w-6xl mx-auto px-4 mt-28 mb-10">
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden relative">
+      <!-- Banner image container -->
+      <div id="banner-container" class="relative h-64 sm:h-80 md:h-96 overflow-hidden rounded-2xl">
+        <!-- Slides injected by JS -->
+      </div>
 
-   <!-- HERO / BANNER -->
-<section id="home" class="max-w-6xl mx-auto px-4">
-  <div class="bg-white rounded-lg shadow overflow-hidden relative">
-    <!-- Banner image container -->
-    <div id="banner-container" class="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-      <!-- Slides injected by JS -->
+      <!-- Navigation Buttons -->
+      <button id="prevSlide"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition">
+        &#10094;
+      </button>
+      <button id="nextSlide"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition">
+        &#10095;
+      </button>
+      <!-- Overlay: Shop Now button -->
+      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+        <a href="#products" class="inline-block px-6 py-3 bg-rose-600 text-white font-semibold rounded-full shadow-lg hover:bg-rose-700 transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
+          Shop Now
+        </a>
     </div>
+  </section>
 
-    <!-- Overlay: Prev / Next arrows -->
-    <button id="banner-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-rose-500 z-10" aria-label="Previous slide">
-      ‹
-    </button>
-    <button id="banner-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-rose-500 z-10" aria-label="Next slide">
-      ›
-    </button>
-
-    <!-- Overlay: Shop Now button -->
-    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
-      <a href="#products" class="inline-block px-6 py-3 bg-rose-600 text-white font-semibold rounded-full shadow-lg hover:bg-rose-700 transition-all focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
-        Shop Now
-      </a>
+  <!-- SPECIAL OFFERS -->
+  <section id="special-offers" class="max-w-6xl mx-auto px-4 py-10">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-2xl font-bold text-rose-700 mb-4">🔥 Special Offers</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-rose-50 rounded">
+          <h3 class="font-semibold">Buy 1 Get 1 Free</h3>
+          <p class="text-sm text-slate-600 mt-1">On selected items.</p>
+        </div>
+        <div class="p-4 bg-rose-50 rounded">
+          <h3 class="font-semibold">Free Shipping</h3>
+          <p class="text-sm text-slate-600 mt-1">Orders over 900 BDT.</p>
+        </div>
+        <div class="p-4 bg-rose-50 rounded">
+          <h3 class="font-semibold">10% Discount</h3>
+          <p class="text-sm text-slate-600 mt-1">Use coupon: SMART10</p>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-    <!-- SPECIAL OFFERS (moved under hero) -->
-    <section id="special-offers" class="max-w-6xl mx-auto px-4 py-10">
-      <div class="bg-white p-6 rounded-lg shadow">
-        <h2 class="text-2xl font-bold text-rose-700 mb-4">🔥 Special Offers</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="p-4 bg-rose-50 rounded">
-            <h3 class="font-semibold">Buy 1 Get 1 Free</h3>
-            <p class="text-sm text-slate-600 mt-1">On selected fresh fruits.</p>
-          </div>
-          <div class="p-4 bg-rose-50 rounded">
-            <h3 class="font-semibold">Free Shipping</h3>
-            <p class="text-sm text-slate-600 mt-1">Orders over 900 BDT.</p>
-          </div>
-          <div class="p-4 bg-rose-50 rounded">
-            <h3 class="font-semibold">10% Discount</h3>
-            <p class="text-sm text-slate-600 mt-1">Use coupon: SMART10</p>
-          </div>
+  <!-- PRODUCTS SECTION -->
+<section id="products" class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header: Title + Search & Filters -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+      <h2 class="text-2xl font-bold text-rose-700">Products</h2>
+  
+      <!-- Search + Sort + Clear Filters-->
+      <div class="hidden md:flex items-center gap-3">
+        <input id="search-input" type="search" placeholder="Search products..." 
+               class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+        <select id="sort-select" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
+          <option value="default">Sort</option>
+          <option value="low">Low → High</option>
+          <option value="high">High → Low</option>
+        </select>
+        <button id="clear-filters" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition">Clear</button>
+      </div>
+    </div>
+  
+    <!-- Products Grid -->
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Product cards will be injected by JS -->
+    </div>
+  </section>
+  
+  <!-- REVIEWS -->
+  <section id="reviews" class="max-w-6xl mx-auto px-4 py-8 bg-rose-50">
+    <h3 class="text-center text-xl font-semibold text-rose-700 mb-4">Customer Reviews</h3>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div id="reviews-container" class="h-40 flex items-center justify-center"></div>
+      <div class="mt-4 flex justify-center gap-3">
+        <button id="review-prev" class="px-3 py-1 rounded border">Prev</button>
+        <button id="review-next" class="px-3 py-1 rounded border">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="max-w-6xl mx-auto px-4 py-8">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-center text-xl font-semibold text-rose-700 mb-4">About Us</h3>
+      <p class="mt-2 text-slate-700">SmartShop sources fresh produce directly from trusted local farms and delivers them to your home. We focus on quality, safety, and speedy delivery.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="max-w-6xl mx-auto px-4 py-8">
+    <h3 class="text-center text-xl font-bold text-rose-700 mb-3">Contact Us</h3>
+    <form id="contact-form" class="bg-white p-6 rounded-lg shadow space-y-4">
+      <div>
+        <label class="block text-sm font-medium">Name</label>
+        <input id="contact-name" type="text" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input id="contact-email" type="email" required class="w-full px-3 py-2 border rounded" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Message</label>
+        <textarea id="contact-message" rows="4" required class="w-full px-3 py-2 border rounded"></textarea>
+      </div>
+      <div class="flex items-center gap-3">
+        <button type="submit" class="px-4 py-2 bg-rose-600 text-white rounded hover:bg-rose-700">Send Message
+        </button>
+        <div id="contact-success" class="text-green-600 hidden">✅ Thank you — we received your message.</div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Footer -->
+<footer id="faq" class="bg-gray-100 pt-16 pb-8 text-gray-700">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-5 gap-8 px-8 text-sm">
+      <!-- Brand -->
+      <div>
+        <h3 class="text-2xl font-bold text-rose-700 mb-4">SmartShop</h3>
+        <p>Chittagong, Bangladesh</p>
+        <p class="mt-2">contact@smartshop.com</p>
+        <p class="mt-1">+880 1234 567 890</p>
+        <div class="flex space-x-4 mt-4 text-lg">
+          <a href="#" class="hover:text-rose-600"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" class="hover:text-rose-600"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="hover:text-rose-600"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="hover:text-rose-600"><i class="fa-brands fa-linkedin"></i></a>
         </div>
       </div>
-    </section>
-
-    <!-- PRODUCTS -->
-    <section id="products" class="max-w-6xl mx-auto px-4 py-8">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-rose-700">Products</h2>
-
-        <div class="hidden md:flex items-center gap-3">
-          <input id="search-input" type="search" placeholder="Search products..." class="px-3 py-2 border rounded" />
-          <select id="sort-select" class="px-3 py-2 border rounded">
-            <option value="default">Sort</option>
-            <option value="low">Low → High</option>
-            <option value="high">High → Low</option>
-          </select>
-          <button id="clear-filters" class="px-3 py-2 bg-gray-100 rounded">Clear</button>
+  
+      <!-- Categories -->
+      <div>
+        <h4 class="font-semibold mb-3">Categories</h4>
+        <ul class="space-y-2">
+          <li><a href="#products" class="hover:text-rose-600">Fruits</a></li>
+          <li><a href="#products" class="hover:text-rose-600">Vegetables</a></li>
+          <li><a href="#products" class="hover:text-rose-600">Dairy</a></li>
+          <li><a href="#products" class="hover:text-rose-600">Snacks</a></li>
+          <li><a href="#products" class="hover:text-rose-600">Beverages</a></li>
+        </ul>
+      </div>
+  
+      <!-- Information -->
+      <div>
+        <h4 class="font-semibold mb-3">Information</h4>
+        <ul class="space-y-2">
+          <li><a href="#about" class="hover:text-rose-600">About Us</a></li>
+          <li><a href="#contact" class="hover:text-rose-600">Contact Us</a></li>
+          <li><a href="#" class="hover:text-rose-600">Terms & Conditions</a></li>
+          <li><a href="#" class="hover:text-rose-600">Shipping & Delivery</a></li>
+          <li><a href="#" class="hover:text-rose-600">Privacy Policy</a></li>
+        </ul>
+      </div>
+  
+      <!-- Useful Links -->
+      <div>
+        <h4 class="font-semibold mb-3">Useful Links</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-rose-600">Store Location</a></li>
+          <li><a href="#" class="hover:text-rose-600">My Account</a></li>
+          <li><a href="#faq" class="hover:text-rose-600">FAQs</a></li>
+        </ul>
+      </div>
+  
+      <!-- Newsletter -->
+      <div>
+        <h4 class="font-semibold mb-3">Newsletter Signup</h4>
+        <p class="mb-3 text-gray-600">
+          Subscribe to our newsletter and get 10% off your first purchase.
+        </p>
+        <div class="flex">
+          <input
+            type="email"
+            placeholder="Your email address"
+            class="border border-gray-300 px-3 py-2 w-full rounded-l-md focus:outline-none focus:ring-2 focus:ring-rose-500"
+          />
+          <button class="bg-rose-600 text-white px-4 py-2 rounded-r-md hover:bg-rose-700 transition">
+            Subscribe
+          </button>
         </div>
       </div>
-
-      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- product cards injected by JS -->
-      </div>
-    </section>
-
-    <!-- REVIEWS -->
-    <section id="reviews" class="max-w-6xl mx-auto px-4 py-8 bg-rose-50">
-      <h3 class="text-center text-xl font-semibold text-rose-700 mb-4">Customer Reviews</h3>
-      <div class="bg-white p-6 rounded-lg shadow">
-        <div id="reviews-container" class="h-40 flex items-center justify-center"></div>
-        <div class="mt-4 flex justify-center gap-3">
-          <button id="review-prev" class="px-3 py-1 rounded border">Prev</button>
-          <button id="review-next" class="px-3 py-1 rounded border">Next</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="max-w-4xl mx-auto px-4 py-8">
-      <div class="bg-white p-6 rounded-lg shadow">
-        <h3 class="text-lg font-bold text-rose-700">About Us</h3>
-        <p class="mt-2 text-slate-700">PranBondhu sources fresh produce directly from trusted local farms and delivers them to your home. We focus on quality, safety, and speedy delivery.</p>
-      </div>
-    </section>
-
-    <!-- CONTACT (form) -->
-    <section id="contact" class="max-w-4xl mx-auto px-4 py-8">
-      <h3 class="text-lg font-bold text-rose-700 mb-3">Contact Us</h3>
-      <form id="contact-form" class="bg-white p-6 rounded-lg shadow space-y-4">
-        <div>
-          <label class="block text-sm font-medium">Name</label>
-          <input id="contact-name" type="text" required class="w-full px-3 py-2 border rounded" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input id="contact-email" type="email" required class="w-full px-3 py-2 border rounded" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Message</label>
-          <textarea id="contact-message" rows="4" required class="w-full px-3 py-2 border rounded"></textarea>
-        </div>
-        <div class="flex items-center gap-3">
-          <button type="submit" class="px-4 py-2 bg-rose-600 text-white rounded hover:bg-rose-700">Send Message</button>
-          <div id="contact-success" class="text-green-600 hidden">✅ Thank you — we received your message.</div>
-        </div>
-      </form>
-    </section>
-
-    <!-- FOOTER + NEWSLETTER -->
-    <footer class="bg-rose-700 text-white mt-8">
-      <div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h4 class="font-bold">PranBondhu</h4>
-          <p class="text-sm mt-1">Fresh produce delivered with care.</p>
-        </div>
-
-        <div>
-          <h4 class="font-bold">Quick links</h4>
-          <ul class="mt-2 space-y-1 text-sm">
-            <li><a href="#home" class="hover:underline">Home</a></li>
-            <li><a href="#products" class="hover:underline">Products</a></li>
-            <li><a href="#contact" class="hover:underline">Contact</a></li>
-          </ul>
-        </div>
-
-        <!-- newsletter form -->
-        <div>
-          <h4 class="font-bold">Newsletter</h4>
-          <form id="newsletter-form" class="mt-2 flex gap-2">
-            <input id="newsletter-email" type="email" placeholder="you@example.com" required class="px-3 py-2 rounded text-slate-800 flex-1" />
-            <button id="newsletter-btn" type="submit" class="px-3 py-2 bg-white text-rose-700 rounded">Subscribe</button>
-          </form>
-          <p id="newsletter-msg" class="text-sm text-green-200 mt-2 hidden">✅ Subscribed</p>
-        </div>
-      </div>
-
-      <div class="text-center py-4 text-sm">
-        <div>&copy; <span id="current-year"></span> PranBondhu</div>
-        <button id="back-to-top" class="underline mt-2">Back to top</button>
-      </div>
-    </footer>
-  </main>
-
+    </div>
+  
+    <!-- Bottom -->
+    <div class="border-t mt-10 pt-6 text-center text-gray-500 text-sm">
+      © <span class="text-rose-600 font-semibold">SmartShop</span> 2025. All rights reserved.
+    </div>
+  </footer>
+  
   <!-- CART OVERLAY + SIDEBAR -->
   <div id="cart-overlay" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 
@@ -250,9 +338,7 @@
   <!-- SMALL NOTIFICATION -->
   <div id="notification" class="fixed bottom-6 left-6 bg-rose-600 text-white px-4 py-2 rounded shadow opacity-0 transition-opacity z-50">Notification</div>
 
-  <script>
-    // small helper: set current year
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-  </script>
+  <!-- External JS -->
+  <script src="script.js"></script>
 </body>
 </html>
